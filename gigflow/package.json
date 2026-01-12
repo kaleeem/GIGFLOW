@@ -1,0 +1,19 @@
+{
+    "name": "gigflow-monorepo",
+    "version": "1.0.0",
+    "description": "GigFlow Marketplace - Full Stack",
+    "scripts": {
+        "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+        "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+        "start": "concurrently \"cd backend && npm start\" \"cd frontend && npm run preview\"",
+        "seed": "cd backend && node src/utils/seeder.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    },
+    "main": "index.js",
+    "type": "commonjs"
+}
