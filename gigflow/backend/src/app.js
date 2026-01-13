@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
@@ -16,6 +17,13 @@ const bidRoutes = require('./routes/bid');
  */
 
 const app = express();
+
+// CORS Configuration
+// Allow same-origin requests with credentials (cookies)
+app.use(cors({
+    origin: true, // Allow same origin
+    credentials: true // Enable cookies
+}));
 
 // Security headers - configured for serving static files
 app.use(helmet({
