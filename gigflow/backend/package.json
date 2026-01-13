@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "build:frontend": "cd ../frontend && npm install && npm run build",
-    "copy:frontend": "node scripts/copy-frontend.js",
+    "copy-frontend": "if exist public rmdir /s /q public && xcopy /s /e /i /y ..\\frontend\\dist public",
     "build": "npm run build:frontend && npm run copy:frontend",
     "postinstall": "npm run build || true",
     "start": "node src/server.js",
