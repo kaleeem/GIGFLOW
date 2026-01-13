@@ -5,9 +5,8 @@
   "main": "src/server.js",
   "scripts": {
     "build:frontend": "cd ../frontend && npm install && npm run build",
-    "copy-frontend": "if exist public rmdir /s /q public && xcopy /s /e /i /y ..\\frontend\\dist public",
-    "build": "npm run build:frontend && npm run copy:frontend",
-    "postinstall": "npm run build || true",
+    "copy-frontend": "rm -rf public && cp -r ../frontend/dist public",
+    "build": "npm run build:frontend && npm run copy-frontend",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "prod": "NODE_ENV=production node src/server.js"
