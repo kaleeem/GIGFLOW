@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors');
+const path = require('path');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const morgan = require('morgan');
@@ -12,30 +12,29 @@ const bidRoutes = require('./routes/bid');
 
 /**
  * Express Application Configuration
- * Configures middleware, routes, and error handling
+ * Serves both API and frontend in single deployment
  */
 
 const app = express();
 
-app.use(helmet());
+// Security headers - configured for serving static files
+app.use(helmet({
+    contentSecurityPolicy: false, // Allow inline scripts for React
+    crossOriginEmbedderPolicy: false
+}));
 
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 
-const corsOptions = {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-    credentials: true,
-    optionsSuccessStatus: 200,
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-};
-
-app.use(cors(corsOptions));
+// Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Cookie parser middleware
 app.use(cookieParser());
 
+// Health check endpoint
 app.get('/health', (req, res) => {
     res.status(200).json({
         success: true,
@@ -44,17 +43,22 @@ app.get('/health', (req, res) => {
     });
 });
 
+// API Routes - these take priority over static files
 app.use('/api/auth', authRoutes);
 app.use('/api/gigs', gigRoutes);
 app.use('/api/bids', bidRoutes);
 
-app.use((req, res) => {
-    res.status(404).json({
-        success: false,
-        message: 'Route not found'
-    });
+// Serve static files from frontend build
+// This serves index.html, assets/, etc.
+app.use(express.static(path.join(__dirname, '../public')));
+
+// SPA fallback - serve index.html for any non-API routes
+// This allows React Router to handle client-side routing
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
+// Error handling middleware (must be last)
 app.use(errorHandler);
 
 module.exports = app;

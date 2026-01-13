@@ -4,6 +4,10 @@
   "description": "GigFlow Marketplace Backend - Production-ready freelance platform",
   "main": "src/server.js",
   "scripts": {
+    "build:frontend": "cd ../frontend && npm install && npm run build",
+    "copy:frontend": "node scripts/copy-frontend.js",
+    "build": "npm run build:frontend && npm run copy:frontend",
+    "postinstall": "npm run build || true",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
     "prod": "NODE_ENV=production node src/server.js"

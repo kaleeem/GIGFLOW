@@ -9,7 +9,8 @@ let socket = null;
 
 export const initializeSocket = (userId) => {
     if (!socket) {
-        socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000', {
+        // Connect to same origin - works when frontend served by backend
+        socket = io({
             withCredentials: true,
             transports: ['websocket', 'polling']
         });

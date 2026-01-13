@@ -5,8 +5,9 @@ import axios from 'axios';
  * Configured for cookie-based authentication
  */
 
+// Use relative paths - works when frontend is served by backend
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
+    baseURL: '', // Empty string = same origin as current page
     withCredentials: true, // Critical for HttpOnly cookies
     headers: {
         'Content-Type': 'application/json'
